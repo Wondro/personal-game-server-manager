@@ -108,6 +108,7 @@ Parameters:
     ConstraintDescription: You must choose a server size
     Type: String
     AllowedValues:
+      - t3.medium
       - t3.large
       - t3.xlarge
   LatestAMIIDx86:
