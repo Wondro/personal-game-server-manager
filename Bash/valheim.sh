@@ -24,7 +24,8 @@ aws ssm put-parameter --name $PARAMNAME --value $VHPW --type "SecureString" --ov
 
 #install docker and valheim app on docker
 sudo apt install docker-ce docker-ce-cli containerd.io -y
-sudo apt install docker-compose -y
+sudo sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 sudo usermod -aG docker $USER
 sudo mkdir /usr/games/serverconfig
 cd /usr/games/serverconfig

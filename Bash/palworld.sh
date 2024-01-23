@@ -24,11 +24,12 @@ aws ssm put-parameter --name $PARAMNAME --value $VHPW --type "SecureString" --ov
 
 #install docker and palworld app on docker
 sudo apt install docker-ce docker-ce-cli containerd.io -y
-sudo apt install docker-compose -y
+sudo sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 sudo usermod -aG docker $USER
 sudo mkdir /usr/games/serverconfig
 cd /usr/games/serverconfig
-sudo bash -c 'echo "version: \"3\"
+sudo bash -c 'echo
 services:
    palworld:
       image: thijsvanloef/palworld-server-docker:latest
@@ -38,17 +39,21 @@ services:
         - 8211:8211/udp
         - 27015:27015/udp
       environment:
-         - PUID=1000
-         - PGID=1000
          - PORT=8211 # Optional but recommended
          - PLAYERS=16 # Optional but recommended
-         - MULTITHREADING=false
+         - MULTITHREADING=true
+         - ENABLE_RCON=true
+         - RCON_PORT=25575
+         - ADMIN_PASSWORD="4Lif3!!"
          - COMMUNITY=false  # Enable this if you want your server to show up in the community servers tab, USE WITH SERVER_PASSWORD!
          # Enable the environment variables below if you have COMMUNITY=true
-         # - SERVER_PASSWORD='"$VHPW"'
+         # - SERVER_PASSWORD="worldofpals"
          # - SERVER_NAME="World of Pals"
-         # - ADMIN_PASSWORD="someAdminPassword"
       volumes:
          - ./palworld:/palworld/
+   rcon:
+      image: outdead/rcon:latest
+      entrypoint: ['/rcon', '-a', 'palworld:25575', '-p', '4Lif3!!']
+      profiles: ['rcon']'
 echo "@reboot root (cd /usr/games/serverconfig/ && docker-compose up)" > /etc/cron.d/awsgameserver
 sudo docker-compose up
